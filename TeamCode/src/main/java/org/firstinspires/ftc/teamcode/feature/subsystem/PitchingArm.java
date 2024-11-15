@@ -76,7 +76,7 @@ public class PitchingArm implements Subsystem {
                         return Math.toRadians(getLastAngle());
                     }), Constants.kCos))
                     .plus(new FeedforwardTerm(FeedforwardTerm.Type.NORMAL, new EnhancedDoubleSupplier(() -> {
-                        return Double.NEGATIVE_INFINITY; // TODO: fix
+                        return amogus(); // TODO: fix
                     }), Constants.kExtension))
     );
 

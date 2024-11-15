@@ -41,6 +41,9 @@ public class ThreeDeadWheel implements Subsystem {
     public static double trackWidth = 15.848543;
     public static double centerWheelOffset = 8.87;
     public static double inPerTick = (Math.PI * 1.25984252) / 2000.0;
+    public static double xMulitplier = 1.0;
+    public static double yMultiplier = 1.0;
+    public static double hMultiplier = 1.0;
 
     SubsystemObjectCell<HolonomicOdometry> odometry = subsystemCell(() -> new HolonomicOdometry(
             () -> left.get().getCurrentPosition() * inPerTick,
@@ -104,7 +107,8 @@ public class ThreeDeadWheel implements Subsystem {
 
     // TODO: convert to dairy pose2d
     public Pose2d getPose() {
-        return odometry.get().getPose();
+        Pose2d pose = odometry.get().getPose();
+        return new Pose2d(pose.getX() * xMulitplier, pose.getY() * yMultiplier, new Rotation2d(pose.getRotation().getRadians() * hMultiplier));
     }
 
 }
