@@ -19,6 +19,10 @@ import java.util.regex.Pattern
 
 apply plugin: 'com.android.application'
 
+repositories {
+    mavenCentral()
+}
+
 android {
 
     compileSdkVersion 29
@@ -53,6 +57,7 @@ android {
         minSdkVersion 24
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 28
+        multiDexEnabled true
 
         /**
          * We keep the versionCode and versionName of robot controller applications in sync with
