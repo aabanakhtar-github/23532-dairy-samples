@@ -26,6 +26,7 @@ import dev.frozenmilk.dairy.core.util.supplier.numeric.EnhancedDoubleSupplier;
 import dev.frozenmilk.dairy.core.util.supplier.numeric.MotionComponentSupplier;
 import dev.frozenmilk.dairy.core.util.supplier.numeric.MotionComponents;
 import dev.frozenmilk.dairy.core.wrapper.Wrapper;
+import dev.frozenmilk.mercurial.commands.Lambda;
 import dev.frozenmilk.mercurial.subsystems.Subsystem;
 import dev.frozenmilk.mercurial.subsystems.SubsystemObjectCell;
 import kotlin.annotation.MustBeDocumented;
@@ -110,12 +111,13 @@ public class PitchingArm implements Subsystem {
     @Override
     public void preUserStartHook(@NonNull Wrapper opmode) {
         // TODO: current based arm reset
+        pitchPID.setEnabled(true);
     }
 
     @Override
     public void preUserLoopHook(@NonNull Wrapper opmode) {
-        lastEncoderPosition = getPitchMotor().__IMPL.getCurrentPosition();
-        double error = targetPosition - lastEncoderPosition;
+        lastEncoderPosition = getTargetPosition();
+
     }
 
 
@@ -133,11 +135,21 @@ public class PitchingArm implements Subsystem {
         return lastEncoderPosition / Constants.kTicksPerDegree;
     }
 
-    public double setTargetPosition(double pos) {
-        return targetPosition = pos;
-    }
-
     public double getTargetPosition() {
         return targetPosition;
+    }
+
+    // angle in degrees
+    public Lambda setAngleCommand(double angle) {
+        return new Lambda("set-angle-command")
+                .setInit(() -> {})
+                .setExecute(() -> {
+                   setTargetPosition(Constants.kTicksPerDegree * angle);
+                })
+                .setFinish(() -> true);
+    }
+
+    private double setTargetPosition(double pos) {
+        return targetPosition = pos;
     }
 }
