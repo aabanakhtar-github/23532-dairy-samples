@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.feature.subsystem.ThreeDeadWheel;
 import dev.frozenmilk.mercurial.Mercurial;
 
 @Mercurial.Attach
-@MecanumDrive.Attach
 @Hubs.Attach
-@ThreeDeadWheel.Attach
+@org.firstinspires.ftc.teamcode.feature.subsystem.PitchingArm.Attach
+//@ThreeDeadWheel.Attach
 public abstract class RoboticOpMode extends OpMode {
 }

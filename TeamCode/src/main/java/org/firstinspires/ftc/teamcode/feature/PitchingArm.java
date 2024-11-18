@@ -4,6 +4,7 @@ import android.provider.SyncStateContract;
 
 import androidx.annotation.NonNull;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
@@ -32,7 +33,7 @@ import dev.frozenmilk.mercurial.subsystems.SubsystemObjectCell;
 import kotlin.annotation.MustBeDocumented;
 
 public class PitchingArm implements Subsystem {
-
+    @Config
     public static class Constants {
         // 72:1 ratio PPR -> 1993.6 pulses
         public static double kTicksPerDegree = 1993.6 / 360.0;
@@ -52,7 +53,7 @@ public class PitchingArm implements Subsystem {
     private static double targetPosition = 0.0f;
     // motor
     private final SubsystemObjectCell<CachedMotor> pitchMotor = subsystemCell(
-            () -> new CachedMotor(FeatureRegistrar.getActiveOpMode().hardwareMap, "leftFront"));
+            () -> new CachedMotor(FeatureRegistrar.getActiveOpMode().hardwareMap, "pitcher"));
     // PID and Feedforward
     private final DoubleController pitchPID = new DoubleController(
             component -> {
@@ -76,9 +77,9 @@ public class PitchingArm implements Subsystem {
                     .plus(new FeedforwardTerm(FeedforwardTerm.Type.COSINE, new EnhancedDoubleSupplier(() -> {
                         return Math.toRadians(getLastAngle());
                     }), Constants.kCos))
-                    .plus(new FeedforwardTerm(FeedforwardTerm.Type.NORMAL, new EnhancedDoubleSupplier(() -> {
+                    /*.plus(new FeedforwardTerm(FeedforwardTerm.Type.NORMAL, new EnhancedDoubleSupplier(() -> {
                         return amogus(); // TODO: fix
-                    }), Constants.kExtension))
+                    }), Constants.kExtension))*/
     );
 
 
@@ -105,19 +106,18 @@ public class PitchingArm implements Subsystem {
 
     @Override
     public void preUserInitHook(@NonNull Wrapper opmode) {
+        getPitchMotor().setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         getPitchMotor().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     @Override
     public void preUserStartHook(@NonNull Wrapper opmode) {
         // TODO: current based arm reset
-        pitchPID.setEnabled(true);
     }
 
     @Override
     public void preUserLoopHook(@NonNull Wrapper opmode) {
         lastEncoderPosition = getTargetPosition();
-
     }
 
 
