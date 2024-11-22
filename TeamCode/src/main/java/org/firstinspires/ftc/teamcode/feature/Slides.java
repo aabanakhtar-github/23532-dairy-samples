@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.control.FeedforwardTerm;
 import org.firstinspires.ftc.teamcode.feature.subsystem.Hubs;
-import org.firstinspires.ftc.teamcode.feature.subsystem.PitchingArm;
 import org.firstinspires.ftc.teamcode.wrapper.CachedMotor;
 
 import java.lang.annotation.Inherited;
