@@ -1,14 +1,12 @@
 package org.firstinspires.ftc.teamcode.feature.subsystem;
 
-import android.provider.SyncStateContract;
-
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.teamcode.control.FeedforwardTerm;
+import org.firstinspires.ftc.teamcode.feature.Slides;
 import org.firstinspires.ftc.teamcode.wrapper.CachedMotor;
 
 import java.lang.annotation.Inherited;
@@ -19,12 +17,10 @@ import java.lang.annotation.Target;
 import dev.frozenmilk.dairy.core.FeatureRegistrar;
 import dev.frozenmilk.dairy.core.dependency.Dependency;
 import dev.frozenmilk.dairy.core.dependency.annotation.SingleAnnotation;
-import dev.frozenmilk.dairy.core.util.controller.calculation.ControllerCalculation;
 import dev.frozenmilk.dairy.core.util.controller.calculation.pid.DoubleComponent;
 import dev.frozenmilk.dairy.core.util.controller.implementation.DoubleController;
 import dev.frozenmilk.dairy.core.util.supplier.numeric.CachedMotionComponentSupplier;
 import dev.frozenmilk.dairy.core.util.supplier.numeric.EnhancedDoubleSupplier;
-import dev.frozenmilk.dairy.core.util.supplier.numeric.MotionComponentSupplier;
 import dev.frozenmilk.dairy.core.util.supplier.numeric.MotionComponents;
 import dev.frozenmilk.dairy.core.wrapper.Wrapper;
 import dev.frozenmilk.mercurial.commands.Lambda;
@@ -72,16 +68,14 @@ public class PitchingArm implements Subsystem {
             ),
             getPitchMotor()::setPower,
             new DoubleComponent.P(MotionComponents.STATE, Constants.kP)
-                    .plus(new DoubleComponent.I(MotionComponents.STATE, Constants.kI))
                     .plus(new DoubleComponent.D(MotionComponents.STATE, Constants.kD))
                     .plus(new FeedforwardTerm(FeedforwardTerm.Type.COSINE, new EnhancedDoubleSupplier(() -> {
                         return Math.toRadians(getLastAngle());
                     }), Constants.kCos))
-                    /*.plus(new FeedforwardTerm(FeedforwardTerm.Type.NORMAL, new EnhancedDoubleSupplier(() -> {
-                        return amogus(); // TODO: fix
-                    }), Constants.kExtension))*/
+                    .plus(new FeedforwardTerm(FeedforwardTerm.Type.NORMAL, new EnhancedDoubleSupplier(() -> {
+                        return Slides.INSTANCE.getExtensionRatio();
+                    }), Constants.kExtension))
     );
-
 
     private PitchingArm() {
     }
@@ -149,7 +143,7 @@ public class PitchingArm implements Subsystem {
                 .setFinish(() -> true);
     }
 
-    private double setTargetPosition(double pos) {
-        return targetPosition = pos;
+    private void setTargetPosition(double pos) {
+        targetPosition = pos;
     }
 }
