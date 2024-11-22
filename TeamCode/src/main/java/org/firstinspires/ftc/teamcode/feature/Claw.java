@@ -91,7 +91,7 @@ public class Claw implements Subsystem {
     }
 
     @Override
-    public void cleanUp(@NonNull Wrapper opMode) {
+    public void cleanup(@NonNull Wrapper opMode) {
         diffyLeft.invalidate();
         diffyRight.invalidate();
         claw.invalidate();
