@@ -133,4 +133,10 @@ public class Slides implements Subsystem {
        getRightMotor().setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
        slidePID.setEnabled(true);
     }
+
+    @Override
+    public void cleanup(@NonNull Wrapper opmode) {
+        slideLeft.invalidate();
+        slideRight.invalidate();
+    }
 }
